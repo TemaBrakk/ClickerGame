@@ -9,7 +9,18 @@ public class InputReader : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            OnClick?.Invoke();
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            
+            if (Physics.Raycast(ray, out hit))
+            {
+                Character character;
+                
+                if (hit.collider.TryGetComponent<Character>(out character))
+                {
+                    OnClick?.Invoke();
+                }
+            }
         }
     }
 }

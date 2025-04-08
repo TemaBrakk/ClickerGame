@@ -1,28 +1,28 @@
 public class GameModel
 {
     public float Coins { get; private set; }
-    public float PassiveIncome { get; private set; }
     public float ClickPower { get; private set; }
+    public float PassiveIncome { get; private set; }
 
-    public GameModel(float coins, float passiveIncome, float clickPower)
+    public void Initialize(float coins, float clickPower, float passiveIncome)
     {
         Coins = coins;
-        PassiveIncome = passiveIncome;
         ClickPower = clickPower;
-    }
-
-    public void AddCoins(float amount)
-    {
-        Coins += amount;
-    }
-
-    public void SetPassiveIncome(float passiveIncome)
-    {
         PassiveIncome = passiveIncome;
     }
 
-    public void SetClickpower(float clickPower)
+    public void AddCoins(float bonus)
     {
-        ClickPower = clickPower;
+        Coins += bonus;
+    }
+
+    public void AddPassiveIncome(float bonus)
+    {
+        PassiveIncome += bonus;
+    }
+
+    public void AddClickPower(float bonus)
+    {
+        ClickPower += bonus;
     }
 }
