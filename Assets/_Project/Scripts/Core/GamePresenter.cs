@@ -1,3 +1,6 @@
+using System.Collections;
+using UnityEngine;
+
 public class GamePresenter
 {
     private GameView _gameView;
@@ -13,28 +16,51 @@ public class GamePresenter
 
     private void OnClick()
     {
-        AddMoney(_gameModel.ClickPower);
+        AddCoins(_gameModel.ClickPower);
     }
 
-    public void AddMoneyForPassiveIncome()
-    {
-        AddMoney(_gameModel.PassiveIncome);
-    }
-
-    private void AddMoney(float amount)
+    private void AddCoins(float amount)
     {
         _gameModel.AddCoins(amount);
         _gameView.UpdateCoins(_gameModel.Coins);
     }
 
-    public void AddClickPower()
+    public bool TryAddClickPower(float cost)
     {
-        _gameModel.AddClickPower(1f);
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.AddClickPower(1f);
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
     }
 
-    public void AddPassiveIncome()
+    public bool TryAddPassiveIncome(float cost)
     {
-        _gameModel.AddPassiveIncome(0.5f);
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.AddPassiveIncome(0.5f);
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
+    }
+
+    public IEnumerator IncomeRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+            AddCoins(_gameModel.PassiveIncome);
+        }
+    }
+
+    public bool IsEnoughCoins(float cost)
+    {
+        return cost <= _gameModel.Coins;
     }
 
     public void OnDestroy()

@@ -25,17 +25,27 @@ public class ShopPresenter
         else
             _shopView.ShowShopWindow();
 
-        _shopModel.IsShopWindowActive = !_shopModel.IsShopWindowActive;
+        _shopModel.ChangeShopWindowMode();
     }
 
     private void OnUpgradeClickPowerClick()
     {
-        _gamePresenter.AddClickPower();
+        if (_gamePresenter.TryAddClickPower(_shopModel.ClickPowerUpgradeCost))
+        {
+            _shopModel.AddClickPowerUpgradeCost();
+            _shopView.UpdateClickPowerButton(_shopModel.ClickPowerNextLevel,
+                                             _shopModel.ClickPowerUpgradeCost);
+        }
     }
 
     private void OnUpgradePassiveIncome()
     {
-        _gamePresenter.AddPassiveIncome();
+        if (_gamePresenter.TryAddPassiveIncome(_shopModel.PassiveIncomeUpgradeCost))
+        {
+            _shopModel.AddPassiveIncomeUpgradeCost();
+            _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
+                                             _shopModel.PassiveIncomeUpgradeCost);
+        }
     }
 
     public void OnDestroy()

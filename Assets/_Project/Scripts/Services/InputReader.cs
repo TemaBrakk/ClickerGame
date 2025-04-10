@@ -1,11 +1,11 @@
 using System;
 using UnityEngine;
 
-public class InputReader : MonoBehaviour
+public class InputReader : IUpdatable
 {
     public event Action OnClick;
 
-    private void Update()
+    public void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
