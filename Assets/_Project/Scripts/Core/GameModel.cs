@@ -19,13 +19,18 @@ public class GameModel
         Coins += bonus;
     }
 
-    public void AddPassiveIncome(float bonus)
+    public void UpgradeClickPower(float bonus)
+    {
+        ClickPower += bonus;
+    }
+
+    public void UpgradePassiveIncome(float bonus)
     {
         PassiveIncome += bonus;
     }
 
-    public void AddClickPower(float bonus)
+    public void UpgradePassiveIncomeInterval(float bonus)
     {
-        ClickPower += bonus;
+        PassiveIncomeInterval -= bonus;
     }
 }

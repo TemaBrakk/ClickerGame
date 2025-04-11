@@ -25,6 +25,7 @@ public class ShopPresenter
         _shopView.ShopClicked += OnShopClick;
         _shopView.UpgradeClickPowerClicked += OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked += OnUpgradePassiveIncome;
+        _shopView.UpgradePassiveIncomeIntervalClicked += OnUpgradePassiveIncomeInterval;
     }
 
     private void UpdateView()
@@ -33,6 +34,8 @@ public class ShopPresenter
                                                  _shopModel.ClickPowerUpgradeCost);
         _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
                                             _shopModel.PassiveIncomeUpgradeCost);
+        _shopView.UpdatePassiveIncomeIntervalButton(_shopModel.PassiveIncomeIntervalNextLevel,
+                                                    _shopModel.PassiveIncomeIntervalUpgradeCost);
     }
 
     private void OnShopClick()
@@ -47,7 +50,7 @@ public class ShopPresenter
 
     private void OnUpgradeClickPowerClick()
     {
-        if (_gamePresenter.TryAddClickPower(_shopModel.ClickPowerUpgradeCost))
+        if (_gamePresenter.TryUpgradeClickPower(_shopModel.ClickPowerUpgradeCost))
         {
             _shopModel.AddClickPowerUpgradeCost();
             _shopView.UpdateClickPowerButton(_shopModel.ClickPowerNextLevel,
@@ -57,11 +60,21 @@ public class ShopPresenter
 
     private void OnUpgradePassiveIncome()
     {
-        if (_gamePresenter.TryAddPassiveIncome(_shopModel.PassiveIncomeUpgradeCost))
+        if (_gamePresenter.TryUpgradePassiveIncome(_shopModel.PassiveIncomeUpgradeCost))
         {
             _shopModel.AddPassiveIncomeUpgradeCost();
             _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
                                              _shopModel.PassiveIncomeUpgradeCost);
+        }
+    }
+
+    private void OnUpgradePassiveIncomeInterval()
+    {
+        if (_gamePresenter.TryUpgradePassiveIncomeInterval(_shopModel.PassiveIncomeIntervalUpgradeCost))
+        {
+            _shopModel.AddPassiveIncomeIntervalUpgradeCost();
+            _shopView.UpdatePassiveIncomeIntervalButton(_shopModel.PassiveIncomeIntervalNextLevel,
+                                             _shopModel.PassiveIncomeIntervalUpgradeCost);
         }
     }
 
@@ -70,5 +83,6 @@ public class ShopPresenter
         _shopView.ShopClicked -= OnShopClick;
         _shopView.UpgradeClickPowerClicked -= OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked -= OnUpgradePassiveIncome;
+        _shopView.UpgradePassiveIncomeIntervalClicked -= OnUpgradePassiveIncomeInterval;
     }
 }

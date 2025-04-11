@@ -4,6 +4,8 @@ public class ShopModel
     public int ClickPowerNextLevel { get; private set; }
     public float PassiveIncomeUpgradeCost { get; private set; }
     public int PassiveIncomeNextLevel { get; private set; }
+    public float PassiveIncomeIntervalUpgradeCost { get; private set; }
+    public int PassiveIncomeIntervalNextLevel { get; private set; }
 
     public bool IsShopWindowActive { get; private set; }
 
@@ -14,6 +16,9 @@ public class ShopModel
 
         PassiveIncomeUpgradeCost = startStats.PassiveIncomeUpgradeCost;
         PassiveIncomeNextLevel = startStats.PassiveIncomeNextLevel;
+
+        PassiveIncomeIntervalUpgradeCost = startStats.PassiveIncomeIntervalUpgradeCost;
+        PassiveIncomeIntervalNextLevel = startStats.PassiveIncomeIntervalNextLevel;
 
         IsShopWindowActive = startStats.IsShopWindowActive;
     }
@@ -33,5 +38,11 @@ public class ShopModel
     {
         PassiveIncomeUpgradeCost *= 2f;
         PassiveIncomeNextLevel += 1;
+    }
+
+    public void AddPassiveIncomeIntervalUpgradeCost()
+    {
+        PassiveIncomeIntervalUpgradeCost *= 2f;
+        PassiveIncomeIntervalNextLevel += 1;
     }
 }

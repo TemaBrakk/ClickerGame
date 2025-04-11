@@ -16,8 +16,9 @@ public class GameEntryPoint : MonoBehaviour
     [SerializeField] private GameObject _shopWindow;
     [SerializeField] private TMP_Text _clickPowerButtonText;
     [SerializeField] private TMP_Text _passiveIncomeButtonText;
+    [SerializeField] private TMP_Text _passiveIncomeIntervalButtonText;
 
-    [Header("Data")]
+    [Header("Configs")]
     [SerializeField] private StartGameModelStats _startGameModelStats;
     [SerializeField] private StartShopModelStats _startShopModelStats;
 
@@ -66,7 +67,7 @@ public class GameEntryPoint : MonoBehaviour
         _shopPresenter = new ShopPresenter();
 
         _shopModel.Initialize(_startShopModelStats);
-        _shopView.Initialize(_shopWindow, _clickPowerButtonText, _passiveIncomeButtonText);
+        _shopView.Initialize(_shopWindow, _clickPowerButtonText, _passiveIncomeButtonText, _passiveIncomeIntervalButtonText);
         _shopPresenter.Initialize(_shopModel, _shopView, _gamePresenter);
     }
 

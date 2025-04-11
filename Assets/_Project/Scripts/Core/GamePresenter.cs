@@ -32,11 +32,11 @@ public class GamePresenter
         _gameView.UpdateCoins(_gameModel.Coins);
     }
 
-    public bool TryAddClickPower(float cost)
+    public bool TryUpgradeClickPower(float cost)
     {
         if (IsEnoughCoins(cost))
         {
-            _gameModel.AddClickPower(1f);
+            _gameModel.UpgradeClickPower(1f);
             AddCoins(-cost);
             return true;
         }
@@ -44,11 +44,23 @@ public class GamePresenter
         return false;
     }
 
-    public bool TryAddPassiveIncome(float cost)
+    public bool TryUpgradePassiveIncome(float cost)
     {
         if (IsEnoughCoins(cost))
         {
-            _gameModel.AddPassiveIncome(0.5f);
+            _gameModel.UpgradePassiveIncome(0.5f);
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryUpgradePassiveIncomeInterval(float cost)
+    {
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.UpgradePassiveIncomeInterval(0.1f);
             AddCoins(-cost);
             return true;
         }

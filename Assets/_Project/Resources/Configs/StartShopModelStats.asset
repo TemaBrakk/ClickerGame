@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: StartShopModelStats
   m_EditorClassIdentifier: 
   ClickPowerUpgradeCost: 10
-  ClickPowerNextLevel: 2
+  ClickPowerNextLevel: 1
   PassiveIncomeUpgradeCost: 10
   PassiveIncomeNextLevel: 1
+  PassiveIncomeIntervalUpgradeCost: 100
+  PassiveIncomeIntervalNextLevel: 1
   IsShopWindowActive: 0

@@ -8,18 +8,22 @@ public class ShopView : MonoBehaviour
     public Action ShopClicked;
     public Action UpgradeClickPowerClicked;
     public Action UpgradePassiveIncomeClicked;
+    public Action UpgradePassiveIncomeIntervalClicked;
 
     private GameObject _shopWindow;
     private TMP_Text _clickPowerButtonText;
     private TMP_Text _passiveIncomeButtonText;
+    private TMP_Text _passiveIncomeIntervalButtonText;
 
     public void Initialize(GameObject shopWindow,
                            TMP_Text clickPowerButtonText,
-                           TMP_Text passiveIncomeButtonText)
+                           TMP_Text passiveIncomeButtonText,
+                           TMP_Text passiveIncomeIntervalButtonText)
     {
         _shopWindow = shopWindow;
         _clickPowerButtonText = clickPowerButtonText;
         _passiveIncomeButtonText = passiveIncomeButtonText;
+        _passiveIncomeIntervalButtonText = passiveIncomeIntervalButtonText;
     }
 
     public void OnShopButtonClick()
@@ -35,6 +39,11 @@ public class ShopView : MonoBehaviour
     public void OnUpgradePassiveIncomeClick()
     {
         UpgradePassiveIncomeClicked?.Invoke();
+    }
+
+    public void OnUpgradePassiveIncomeIntervalClick()
+    {
+        UpgradePassiveIncomeIntervalClicked?.Invoke();
     }
 
     public void ShowShopWindow()
@@ -63,5 +72,10 @@ public class ShopView : MonoBehaviour
     public void UpdatePassiveIncomeButton(int level, float cost)
     {
         _passiveIncomeButtonText.text = $"Buy lvl {level}\nCost: {cost}";
+    }
+
+    public void UpdatePassiveIncomeIntervalButton(int level, float cost)
+    {
+        _passiveIncomeIntervalButtonText.text = $"Buy lvl {level}\nCost: {cost}";
     }
 }
