@@ -6,6 +6,7 @@ public class GameEntryPoint : MonoBehaviour
     [Header("MVP")]
     [SerializeField] private GameView _gameView;
     [SerializeField] private ShopView _shopView;
+    [SerializeField] private Character _character;
 
     [Header("Services")]
     [SerializeField] private Updater _updater;
@@ -15,6 +16,10 @@ public class GameEntryPoint : MonoBehaviour
     [SerializeField] private GameObject _shopWindow;
     [SerializeField] private TMP_Text _clickPowerButtonText;
     [SerializeField] private TMP_Text _passiveIncomeButtonText;
+
+    [Header("Data")]
+    [SerializeField] private StartGameModelStats _startGameModelStats;
+    [SerializeField] private StartShopModelStats _startShopModelStats;
 
     private GameModel _gameModel;
     private GamePresenter _gamePresenter;
@@ -29,17 +34,27 @@ public class GameEntryPoint : MonoBehaviour
     {
         InitializeServices();
 
+        _character.Initialize();
+
         InitializeGameMVP();
         InitializeShopMVP();
     }
-        
+
+    private void InitializeServices()
+    {
+        _inputReader = new InputReader();
+
+        _updater.Initialize();
+        _updater.AddUpdatable(_inputReader);
+    }
+
     private void InitializeGameMVP()
     {
         _gameModel = new GameModel();
         _gamePresenter = new GamePresenter();
 
-        _gamePresenter.Initialize(_gameView, _gameModel);
-        _gameModel.Initialize(0f, 0f, 0f);
+        _gamePresenter.Initialize(_gameView, _gameModel, _character);
+        _gameModel.Initialize(_startGameModelStats);
         _gameView.Initialize(_inputReader, _coinsText);
 
         StartCoroutine(_gamePresenter.IncomeRoutine());
@@ -50,17 +65,9 @@ public class GameEntryPoint : MonoBehaviour
         _shopModel = new ShopModel();
         _shopPresenter = new ShopPresenter();
 
-        _shopModel.Initialize();
+        _shopModel.Initialize(_startShopModelStats);
         _shopView.Initialize(_shopWindow, _clickPowerButtonText, _passiveIncomeButtonText);
         _shopPresenter.Initialize(_shopModel, _shopView, _gamePresenter);
-    }
-
-    private void InitializeServices()
-    {
-        _inputReader = new InputReader();
-
-        _updater.Initialize();
-        _updater.AddUpdatable(_inputReader);
     }
 
     private void OnDestroy()

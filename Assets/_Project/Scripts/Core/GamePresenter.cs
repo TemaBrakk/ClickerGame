@@ -6,10 +6,16 @@ public class GamePresenter
     private GameView _gameView;
     private GameModel _gameModel;
 
-    public void Initialize(GameView gameView, GameModel gameModel)
+    private Character _character;
+
+    public void Initialize(GameView gameView,
+                           GameModel gameModel,
+                           Character character)
     {
         _gameView = gameView;
         _gameModel = gameModel;
+
+        _character = character;
 
         _gameView.OnClick += OnClick;
     }
@@ -17,6 +23,7 @@ public class GamePresenter
     private void OnClick()
     {
         AddCoins(_gameModel.ClickPower);
+        _character.OnClick();
     }
 
     private void AddCoins(float amount)
@@ -53,7 +60,7 @@ public class GamePresenter
     {
         while (true)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(_gameModel.PassiveIncomeInterval);
             AddCoins(_gameModel.PassiveIncome);
         }
     }

@@ -13,9 +13,26 @@ public class ShopPresenter
         _shopView = shopView;
         _gamePresenter = gamePresenter;
 
+        SubscribeToViewEvents();
+
+        UpdateView();
+
+        _shopView.ResetShopWindowPosition();
+    }
+
+    private void SubscribeToViewEvents()
+    {
         _shopView.ShopClicked += OnShopClick;
         _shopView.UpgradeClickPowerClicked += OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked += OnUpgradePassiveIncome;
+    }
+
+    private void UpdateView()
+    {
+        _shopView.UpdateClickPowerButton(_shopModel.ClickPowerNextLevel,
+                                                 _shopModel.ClickPowerUpgradeCost);
+        _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
+                                            _shopModel.PassiveIncomeUpgradeCost);
     }
 
     private void OnShopClick()

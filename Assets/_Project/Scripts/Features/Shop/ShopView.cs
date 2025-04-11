@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
@@ -39,11 +40,19 @@ public class ShopView : MonoBehaviour
     public void ShowShopWindow()
     {
         _shopWindow.SetActive(true);
+        _shopWindow.transform.DOMoveY(Screen.height / 2, 0.5f);
     }
 
     public void HideShopWindow()
     {
+        _shopWindow.transform.DOMoveY(-Screen.height, 0.5f)
+            .OnComplete(() => _shopWindow.SetActive(false));
+    }
+
+    public void ResetShopWindowPosition()
+    {
         _shopWindow.SetActive(false);
+        _shopWindow.transform.DOMoveY(-Screen.height, 0.5f);
     }
 
     public void UpdateClickPowerButton(int level, float cost)

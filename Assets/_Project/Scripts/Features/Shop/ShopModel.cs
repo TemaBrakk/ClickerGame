@@ -7,15 +7,15 @@ public class ShopModel
 
     public bool IsShopWindowActive { get; private set; }
 
-    public void Initialize()
+    public void Initialize(StartShopModelStats startStats)
     {
-        ClickPowerUpgradeCost = 0f;
-        ClickPowerNextLevel = 1;
+        ClickPowerUpgradeCost = startStats.ClickPowerUpgradeCost;
+        ClickPowerNextLevel = startStats.ClickPowerNextLevel;
 
-        PassiveIncomeUpgradeCost = 10f;
-        PassiveIncomeNextLevel = 1;
+        PassiveIncomeUpgradeCost = startStats.PassiveIncomeUpgradeCost;
+        PassiveIncomeNextLevel = startStats.PassiveIncomeNextLevel;
 
-        IsShopWindowActive = false;
+        IsShopWindowActive = startStats.IsShopWindowActive;
     }
 
     public void ChangeShopWindowMode()
@@ -25,7 +25,7 @@ public class ShopModel
 
     public void AddClickPowerUpgradeCost()
     {
-        ClickPowerUpgradeCost += 10f;
+        ClickPowerUpgradeCost *= 2f;
         ClickPowerNextLevel += 1;
     }
 
