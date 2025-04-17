@@ -1,17 +1,26 @@
 public class GameModel
 {
     public float Coins { get; private set; }
+
     public float ClickPower { get; private set; }
     public float PassiveIncome { get; private set; }
-
     public float PassiveIncomeInterval { get; private set; }
+
+    private float _clickPowerBonus;
+    private float _passiveIncomeBonus;
+    private float _passiveIncomeIntervalMultiplier;
 
     public void Initialize(StartGameModelStats startStats)
     {
         Coins = startStats.Coins;
+
         ClickPower = startStats.ClickPower;
         PassiveIncome = startStats.PassiveIncome;
         PassiveIncomeInterval = startStats.PassiveIncomeInterval;
+
+        _clickPowerBonus = startStats.ClickPowerBonus;
+        _passiveIncomeBonus = startStats.PassiveIncomeBonus;
+        _passiveIncomeIntervalMultiplier = startStats.PassiveIncomeIntervalMultiplier;
     }
 
     public void AddCoins(float bonus)
@@ -19,18 +28,18 @@ public class GameModel
         Coins += bonus;
     }
 
-    public void UpgradeClickPower(float bonus)
+    public void UpgradeClickPower()
     {
-        ClickPower += bonus;
+        ClickPower += _clickPowerBonus;
     }
 
-    public void UpgradePassiveIncome(float bonus)
+    public void UpgradePassiveIncome()
     {
-        PassiveIncome += bonus;
+        PassiveIncome += _passiveIncomeBonus;
     }
 
-    public void UpgradePassiveIncomeInterval(float bonus)
+    public void UpgradePassiveIncomeInterval()
     {
-        PassiveIncomeInterval -= bonus;
+        PassiveIncomeInterval *= _passiveIncomeIntervalMultiplier;
     }
 }

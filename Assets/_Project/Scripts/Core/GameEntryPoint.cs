@@ -54,9 +54,9 @@ public class GameEntryPoint : MonoBehaviour
         _gameModel = new GameModel();
         _gamePresenter = new GamePresenter();
 
-        _gamePresenter.Initialize(_gameView, _gameModel, _character);
-        _gameModel.Initialize(_startGameModelStats);
         _gameView.Initialize(_inputReader, _coinsText);
+        _gameModel.Initialize(_startGameModelStats);
+        _gamePresenter.Initialize(_gameView, _gameModel, _character);
 
         StartCoroutine(_gamePresenter.IncomeRoutine());
     }

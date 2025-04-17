@@ -18,6 +18,8 @@ public class GamePresenter
         _character = character;
 
         _gameView.OnClick += OnClick;
+
+        _gameView.UpdateCoins(_gameModel.Coins);
     }
 
     private void OnClick()
@@ -36,7 +38,7 @@ public class GamePresenter
     {
         if (IsEnoughCoins(cost))
         {
-            _gameModel.UpgradeClickPower(1f);
+            _gameModel.UpgradeClickPower();
             AddCoins(-cost);
             return true;
         }
@@ -48,7 +50,7 @@ public class GamePresenter
     {
         if (IsEnoughCoins(cost))
         {
-            _gameModel.UpgradePassiveIncome(0.5f);
+            _gameModel.UpgradePassiveIncome();
             AddCoins(-cost);
             return true;
         }
@@ -60,7 +62,7 @@ public class GamePresenter
     {
         if (IsEnoughCoins(cost))
         {
-            _gameModel.UpgradePassiveIncomeInterval(0.1f);
+            _gameModel.UpgradePassiveIncomeInterval();
             AddCoins(-cost);
             return true;
         }

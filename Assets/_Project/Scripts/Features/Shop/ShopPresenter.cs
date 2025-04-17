@@ -31,9 +31,11 @@ public class ShopPresenter
     private void UpdateView()
     {
         _shopView.UpdateClickPowerButton(_shopModel.ClickPowerNextLevel,
-                                                 _shopModel.ClickPowerUpgradeCost);
+                                         _shopModel.ClickPowerUpgradeCost);
+
         _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
                                             _shopModel.PassiveIncomeUpgradeCost);
+
         _shopView.UpdatePassiveIncomeIntervalButton(_shopModel.PassiveIncomeIntervalNextLevel,
                                                     _shopModel.PassiveIncomeIntervalUpgradeCost);
     }

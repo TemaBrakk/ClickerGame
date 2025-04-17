@@ -16,3 +16,6 @@ MonoBehaviour:
   ClickPower: 1
   PassiveIncome: 0
   PassiveIncomeInterval: 1
+  ClickPowerBonus: 1
+  PassiveIncomeBonus: 0.5
+  PassiveIncomeIntervalMultiplier: 0.9
