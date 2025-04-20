@@ -12,15 +12,25 @@ public class GameModel
 
     public void Initialize(StartGameModelStats startStats)
     {
-        Coins = startStats.Coins;
-
-        ClickPower = startStats.ClickPower;
-        PassiveIncome = startStats.PassiveIncome;
-        PassiveIncomeInterval = startStats.PassiveIncomeInterval;
+        SetStats(startStats.Coins,
+                 startStats.ClickPower,
+                 startStats.PassiveIncome,
+                 startStats.PassiveIncomeInterval);
 
         _clickPowerBonus = startStats.ClickPowerBonus;
         _passiveIncomeBonus = startStats.PassiveIncomeBonus;
         _passiveIncomeIntervalMultiplier = startStats.PassiveIncomeIntervalMultiplier;
+    }
+
+    public void SetStats(float coins,
+                         float clickPower,
+                         float passiveIncome,
+                         float passiveIncomeInterval)
+    {
+        Coins = coins;
+        ClickPower = clickPower;
+        PassiveIncome = passiveIncome;
+        PassiveIncomeInterval = passiveIncomeInterval;
     }
 
     public void AddCoins(float bonus)

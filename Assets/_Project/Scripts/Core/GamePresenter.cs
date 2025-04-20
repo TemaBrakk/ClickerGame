@@ -8,6 +8,8 @@ public class GamePresenter
 
     private Character _character;
 
+    private IStorageService _storageService;
+
     public void Initialize(GameView gameView,
                            GameModel gameModel,
                            Character character)
@@ -18,7 +20,17 @@ public class GamePresenter
         _character = character;
 
         _gameView.OnClick += OnClick;
+        _gameView.OnSaveButtonClick += Save;
+        _gameView.OnLoadButtonClick += Load;
 
+        _gameView.UpdateCoins(_gameModel.Coins);
+
+        _storageService = new StorageService();
+    }
+
+    private void AddCoins(float amount)
+    {
+        _gameModel.AddCoins(amount);
         _gameView.UpdateCoins(_gameModel.Coins);
     }
 
@@ -28,9 +40,28 @@ public class GamePresenter
         _character.OnClick();
     }
 
-    private void AddCoins(float amount)
+    private void Save()
     {
-        _gameModel.AddCoins(amount);
+        GameSaveData data = new GameSaveData(_gameModel.Coins,
+                                             _gameModel.ClickPower,
+                                             _gameModel.PassiveIncome,
+                                             _gameModel.PassiveIncomeInterval);
+
+        _storageService.Save("Save", data);
+    }
+
+    private void Load()
+    {
+        _storageService.Load<GameSaveData>("Save", SetStats);
+    }
+
+    private void SetStats(GameSaveData data)
+    {
+        _gameModel.SetStats(data.Coins,
+                            data.ClickPower,
+                            data.PassiveIncome,
+                            data.PassiveIncomeInterval);
+
         _gameView.UpdateCoins(_gameModel.Coins);
     }
 
@@ -87,5 +118,7 @@ public class GamePresenter
     public void OnDestroy()
     {
         _gameView.OnClick -= OnClick;
+        _gameView.OnSaveButtonClick -= Save;
+        _gameView.OnLoadButtonClick -= Load;
     }
 }
