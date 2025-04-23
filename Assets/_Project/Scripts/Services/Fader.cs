@@ -7,7 +7,7 @@ public class Fader : MonoBehaviour
 {
     [SerializeField] private Image _faderImage;
 
-    private const string FADER_PATH = "Fader";
+    private const string FADER_PATH = "Prefabs/Fader";
 
     private static Fader _instance;
     public static Fader Instance

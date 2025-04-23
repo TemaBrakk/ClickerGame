@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 public class SceneLoader : MonoBehaviour
 {
     private const string GAME_SCENE_NAME = "GameScene";
+    private const string MAIN_MENU_SCENE_NAME = "MainMenuScene";
 
     private bool _isLoading;
 
@@ -22,12 +23,20 @@ public class SceneLoader : MonoBehaviour
         DontDestroyOnLoad(_instance.gameObject);
     }
 
-    public void LoadScene()
+    public void LoadGameScene()
     {
         if (_isLoading)
             return;
 
         StartCoroutine(LoadSceneRoutine(GAME_SCENE_NAME));
+    }
+
+    public void LoadMainMenuScene()
+    {
+        if (_isLoading)
+            return;
+
+        StartCoroutine(LoadSceneRoutine(MAIN_MENU_SCENE_NAME));
     }
 
     private IEnumerator LoadSceneRoutine(string sceneName)
