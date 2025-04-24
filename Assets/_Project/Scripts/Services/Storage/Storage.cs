@@ -3,9 +3,9 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 
-public class StorageService : IStorageService
+public class Storage : IStorage
 {
-    public void Save(string key, object data, Action<bool> callback = null)
+    public void Save<T>(string key, T data, Action<bool> callback = null)
     {
         string path = BuildPath(key);
         string json = JsonConvert.SerializeObject(data);
@@ -18,14 +18,13 @@ public class StorageService : IStorageService
         callback?.Invoke(true);
     }
 
-    public void Load<T>(string key, Action<T> callback)
+    public T Load<T>(string key)
     {
         string path = BuildPath(key);
 
-        if (!File.Exists(path))
+        if (!IsFileExists(key))
         {
-            callback?.Invoke(default);
-            return;
+            return default;
         }
 
         using (StreamReader fileStream = new StreamReader(path))
@@ -33,8 +32,14 @@ public class StorageService : IStorageService
             string json = fileStream.ReadToEnd();
             T data = JsonConvert.DeserializeObject<T>(json);
 
-            callback?.Invoke(data);
+            return data;
         }
+    }
+
+    public bool IsFileExists(string key)
+    {
+        string path = BuildPath(key);
+        return File.Exists(path);
     }
 
     private string BuildPath(string key)

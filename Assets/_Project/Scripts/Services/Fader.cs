@@ -35,7 +35,6 @@ public class Fader : MonoBehaviour
     public void FadeOut(Action callback)
     {
         _faderImage.DOFade(0f, 1f)
-            .OnComplete(() => callback?.Invoke())
-            .OnComplete(() => gameObject.SetActive(false));
+            .OnComplete(() => callback?.Invoke());
     }
 }

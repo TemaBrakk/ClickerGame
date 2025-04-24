@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameEntryPoint : MonoBehaviour
 {
@@ -8,15 +9,24 @@ public class GameEntryPoint : MonoBehaviour
     [SerializeField] private ShopView _shopView;
     [SerializeField] private Character _character;
 
-    [Header("Services")]
-    [SerializeField] private Updater _updater;
-
     [Header("UI")]
     [SerializeField] private TMP_Text _coinsText;
     [SerializeField] private GameObject _shopWindow;
     [SerializeField] private TMP_Text _clickPowerButtonText;
     [SerializeField] private TMP_Text _passiveIncomeButtonText;
     [SerializeField] private TMP_Text _passiveIncomeIntervalButtonText;
+
+    [SerializeField] private Button _saveButton;
+    [SerializeField] private Button _saveFirstSlotButton;
+    [SerializeField] private Button _saveSecondSlotButton;
+    [SerializeField] private Button _saveThirdSlotButton;
+    [SerializeField] private GameObject _savesWindow;
+
+    [SerializeField] private Button _exitButton;
+
+    [SerializeField] private TMP_Text _firstSlotInfoText;
+    [SerializeField] private TMP_Text _secondSlotInfoText;
+    [SerializeField] private TMP_Text _thirdSlotInfoText;
 
     [Header("Configs")]
     [SerializeField] private StartGameModelStats _startGameModelStats;
@@ -28,7 +38,10 @@ public class GameEntryPoint : MonoBehaviour
     private ShopModel _shopModel;
     private ShopPresenter _shopPresenter;
 
+    private Updater _updater;
+    private const string UPDATER_PATH = "Prefabs/Updater";
     private InputReader _inputReader;
+    private IStorage _storage;
 
 
     private void Awake()
@@ -45,8 +58,12 @@ public class GameEntryPoint : MonoBehaviour
     {
         _inputReader = new InputReader();
 
+        Updater prefab = Resources.Load<Updater>(UPDATER_PATH);
+        _updater = Instantiate(prefab);
         _updater.Initialize();
         _updater.AddUpdatable(_inputReader);
+
+        _storage = new Storage();
     }
 
     private void InitializeGameMVP()
@@ -54,9 +71,9 @@ public class GameEntryPoint : MonoBehaviour
         _gameModel = new GameModel();
         _gamePresenter = new GamePresenter();
 
-        _gameView.Initialize(_inputReader, _coinsText);
+        _gameView.Initialize(_inputReader, _coinsText, _savesWindow, _saveButton, _saveFirstSlotButton, _saveSecondSlotButton, _saveThirdSlotButton, _exitButton, _firstSlotInfoText, _secondSlotInfoText, _thirdSlotInfoText);
         _gameModel.Initialize(_startGameModelStats);
-        _gamePresenter.Initialize(_gameView, _gameModel, _character);
+        _gamePresenter.Initialize(_gameView, _gameModel, _character, _storage);
 
         StartCoroutine(_gamePresenter.IncomeRoutine());
     }

@@ -1,6 +1,3 @@
-using System;
-
-[Serializable]
 public class GameSaveData
 {
     public float Coins;
@@ -15,6 +12,7 @@ public class GameSaveData
                         float passiveIncomeInterval)
     {
         Coins = coins;
+
         ClickPower = clickPower;
         PassiveIncome = passiveIncome;
         PassiveIncomeInterval = passiveIncomeInterval;

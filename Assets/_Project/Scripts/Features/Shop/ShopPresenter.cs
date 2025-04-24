@@ -14,7 +14,6 @@ public class ShopPresenter
         _gamePresenter = gamePresenter;
 
         SubscribeToViewEvents();
-
         UpdateView();
 
         _shopView.ResetShopWindowPosition();

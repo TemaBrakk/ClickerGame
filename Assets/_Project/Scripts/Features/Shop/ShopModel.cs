@@ -19,7 +19,7 @@ public class ShopModel
 
         PassiveIncomeIntervalUpgradeCost = startStats.PassiveIncomeIntervalUpgradeCost;
         PassiveIncomeIntervalNextLevel = startStats.PassiveIncomeIntervalNextLevel;
-
+        
         IsShopWindowActive = startStats.IsShopWindowActive;
     }
 

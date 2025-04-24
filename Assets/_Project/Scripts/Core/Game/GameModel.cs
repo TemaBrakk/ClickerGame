@@ -5,6 +5,7 @@ public class GameModel
     public float ClickPower { get; private set; }
     public float PassiveIncome { get; private set; }
     public float PassiveIncomeInterval { get; private set; }
+    public bool IsSavesWindowActive { get; private set; }
 
     private float _clickPowerBonus;
     private float _passiveIncomeBonus;
@@ -12,11 +13,6 @@ public class GameModel
 
     public void Initialize(StartGameModelStats startStats)
     {
-        SetStats(startStats.Coins,
-                 startStats.ClickPower,
-                 startStats.PassiveIncome,
-                 startStats.PassiveIncomeInterval);
-
         _clickPowerBonus = startStats.ClickPowerBonus;
         _passiveIncomeBonus = startStats.PassiveIncomeBonus;
         _passiveIncomeIntervalMultiplier = startStats.PassiveIncomeIntervalMultiplier;
@@ -31,6 +27,12 @@ public class GameModel
         ClickPower = clickPower;
         PassiveIncome = passiveIncome;
         PassiveIncomeInterval = passiveIncomeInterval;
+        IsSavesWindowActive = false;
+    }
+
+    public void ChangeSavesWindowMode()
+    {
+        IsSavesWindowActive = !IsSavesWindowActive;
     }
 
     public void AddCoins(float bonus)

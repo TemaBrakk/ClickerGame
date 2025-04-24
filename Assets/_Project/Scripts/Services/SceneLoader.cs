@@ -6,21 +6,23 @@ public class SceneLoader : MonoBehaviour
 {
     private const string GAME_SCENE_NAME = "GameScene";
     private const string MAIN_MENU_SCENE_NAME = "MainMenuScene";
-
+    private const string SCENE_LOADER_PATH = "Prefabs/SceneLoader";
     private bool _isLoading;
 
     private static SceneLoader _instance;
-
-    private void Awake()
+    public static SceneLoader Instance
     {
-        if (_instance != null)
+        get
         {
-            Destroy(gameObject);
-            return;
-        }
+            if (_instance == null)
+            {
+                SceneLoader prefab = Resources.Load<SceneLoader>(SCENE_LOADER_PATH);
+                _instance = Instantiate(prefab);
+                DontDestroyOnLoad(_instance.gameObject);
+            }
 
-        _instance = this;
-        DontDestroyOnLoad(_instance.gameObject);
+            return _instance;
+        }
     }
 
     public void LoadGameScene()

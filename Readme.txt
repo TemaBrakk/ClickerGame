@@ -1,2 +1,3 @@
 TODO
-	1. Make save/load system with 3 clots of saves
+	1. Add shop data to save file
+	2. Refactory the code
