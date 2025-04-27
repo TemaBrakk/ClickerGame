@@ -8,33 +8,23 @@ public class GamePresenter
 
     private Character _character;
 
-    private IStorage _storage;
-
-    private const string SAVE_FILE_NAME = "Save";
-
     public void Initialize(GameView gameView,
                            GameModel gameModel,
-                           Character character,
-                           IStorage storage)
+                           Character character)
     {
         _gameView = gameView;
         _gameModel = gameModel;
         _character = character;
-        _storage = storage;
 
         SubscribeToView();
-        SetStats();
-        UpdateSaveSlotsText();
     }
 
     private void SubscribeToView()
     {
-        _gameView.OnClick += OnClick;
-        _gameView.SaveButtonClicked += HandleSavesWindow;
-        _gameView.SaveFirstSlotButtonClicked += SaveInFirstSlot;
-        _gameView.SaveSecondSlotButtonClicked += SaveInSecondSlot;
-        _gameView.SaveThirdSlotButtonClicked += SaveInThirdSlot;
-        _gameView.ExitButtonClicked += Exit;
+        _gameView.CharacterClicked += OnClick;
+        _gameView.SaveButtonClicked += OnSaveButtonClick;
+        _gameView.ShopButtonClicked += OnShopButtonClick;
+        _gameView.ExitButtonClicked += OnExitButtonClick;
     }
 
     private void AddCoins(float amount)
@@ -49,6 +39,16 @@ public class GamePresenter
         _character.OnClick();
     }
 
+    private void OnSaveButtonClick()
+    {
+        HandleSavesWindow();
+    }
+
+    private void OnShopButtonClick()
+    {
+        HandleShopWindow();
+    }
+
     private void HandleSavesWindow()
     {
         if (_gameModel.IsSavesWindowActive)
@@ -56,69 +56,31 @@ public class GamePresenter
         else
             _gameView.ShowSavesWindow();
 
+        if (_gameModel.IsShopWindowActive)
+            HandleShopWindow();
+
         _gameModel.ChangeSavesWindowMode();
     }
 
-    private void SaveInFirstSlot()
+    private void HandleShopWindow()
     {
-        GameSaveData data = GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "1", data);
-        _gameView.UpdateFirstSaveSlotText(false, data.Coins, data.PassiveIncome);
-    }
-
-    private void SaveInSecondSlot()
-    {
-        GameSaveData data = GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "2", data);
-        _gameView.UpdateSecondSaveSlotText(false, data.Coins, data.PassiveIncome);
-    }
-
-    private void SaveInThirdSlot()
-    {
-        GameSaveData data = GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "3", data);
-        _gameView.UpdateThirdSaveSlotText(false, data.Coins, data.PassiveIncome);
-    }
-
-    private void UpdateSaveSlotsText()
-    {
-        if (!_storage.IsFileExists(SAVE_FILE_NAME + "1"))
-        {
-            _gameView.UpdateFirstSaveSlotText(true);
-        }
+        if (_gameModel.IsShopWindowActive)
+            _gameView.HideShopWindow();
         else
-        {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "1");
-            _gameView.UpdateFirstSaveSlotText(false, data.Coins, data.PassiveIncome);
-        }
+            _gameView.ShowShopWindow();
 
-        if (!_storage.IsFileExists(SAVE_FILE_NAME + "2"))
-        {
-            _gameView.UpdateSecondSaveSlotText(true);
-        }
-        else
-        {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "2");
-            _gameView.UpdateSecondSaveSlotText(false, data.Coins, data.PassiveIncome);
-        }
+        if (_gameModel.IsSavesWindowActive)
+            HandleSavesWindow();
 
-        if (!_storage.IsFileExists(SAVE_FILE_NAME + "3"))
-        {
-            _gameView.UpdateThirdSaveSlotText(true);
-        }
-        else
-        {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "3");
-            _gameView.UpdateThirdSaveSlotText(false, data.Coins, data.PassiveIncome);
-        }
+        _gameModel.ChangeShopWindowMode();
     }
 
-    private void Exit()
+    private void OnExitButtonClick()
     {
         SceneLoader.Instance.LoadMainMenuScene();
     }
 
-    private GameSaveData GetSaveData()
+    public GameSaveData GetSaveData()
     {
         return new GameSaveData(_gameModel.Coins,
                                 _gameModel.ClickPower,
@@ -126,9 +88,8 @@ public class GamePresenter
                                 _gameModel.PassiveIncomeInterval);
     }
 
-    private void SetStats()
+    public void SetStats(GameSaveData data)
     {
-        GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME);
         _gameModel.SetStats(data.Coins,
                             data.ClickPower,
                             data.PassiveIncome,
@@ -189,11 +150,9 @@ public class GamePresenter
 
     public void OnDestroy()
     {
-        _gameView.OnClick -= OnClick;
-        _gameView.SaveButtonClicked -= HandleSavesWindow;
-        _gameView.SaveFirstSlotButtonClicked -= SaveInFirstSlot;
-        _gameView.SaveSecondSlotButtonClicked -= SaveInSecondSlot;
-        _gameView.SaveThirdSlotButtonClicked -= SaveInThirdSlot;
-        _gameView.ExitButtonClicked -= Exit;
+        _gameView.CharacterClicked -= OnClick;
+        _gameView.SaveButtonClicked -= OnSaveButtonClick;
+        _gameView.SaveButtonClicked -= OnShopButtonClick;
+        _gameView.ExitButtonClicked -= OnExitButtonClick;
     }
 }

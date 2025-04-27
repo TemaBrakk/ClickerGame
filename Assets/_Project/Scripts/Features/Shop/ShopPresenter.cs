@@ -15,13 +15,10 @@ public class ShopPresenter
 
         SubscribeToViewEvents();
         UpdateView();
-
-        _shopView.ResetShopWindowPosition();
     }
 
     private void SubscribeToViewEvents()
     {
-        _shopView.ShopClicked += OnShopClick;
         _shopView.UpgradeClickPowerClicked += OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked += OnUpgradePassiveIncome;
         _shopView.UpgradePassiveIncomeIntervalClicked += OnUpgradePassiveIncomeInterval;
@@ -37,16 +34,6 @@ public class ShopPresenter
 
         _shopView.UpdatePassiveIncomeIntervalButton(_shopModel.PassiveIncomeIntervalNextLevel,
                                                     _shopModel.PassiveIncomeIntervalUpgradeCost);
-    }
-
-    private void OnShopClick()
-    {
-        if (_shopModel.IsShopWindowActive)
-            _shopView.HideShopWindow();
-        else
-            _shopView.ShowShopWindow();
-
-        _shopModel.ChangeShopWindowMode();
     }
 
     private void OnUpgradeClickPowerClick()
@@ -81,7 +68,6 @@ public class ShopPresenter
 
     public void OnDestroy()
     {
-        _shopView.ShopClicked -= OnShopClick;
         _shopView.UpgradeClickPowerClicked -= OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked -= OnUpgradePassiveIncome;
         _shopView.UpgradePassiveIncomeIntervalClicked -= OnUpgradePassiveIncomeInterval;

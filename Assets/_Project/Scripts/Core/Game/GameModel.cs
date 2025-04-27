@@ -6,6 +6,7 @@ public class GameModel
     public float PassiveIncome { get; private set; }
     public float PassiveIncomeInterval { get; private set; }
     public bool IsSavesWindowActive { get; private set; }
+    public bool IsShopWindowActive { get; private set; }
 
     private float _clickPowerBonus;
     private float _passiveIncomeBonus;
@@ -28,11 +29,17 @@ public class GameModel
         PassiveIncome = passiveIncome;
         PassiveIncomeInterval = passiveIncomeInterval;
         IsSavesWindowActive = false;
+        IsShopWindowActive = false;
     }
 
     public void ChangeSavesWindowMode()
     {
         IsSavesWindowActive = !IsSavesWindowActive;
+    }
+
+    public void ChangeShopWindowMode()
+    {
+        IsShopWindowActive = !IsShopWindowActive;
     }
 
     public void AddCoins(float bonus)

@@ -2,65 +2,41 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopView : MonoBehaviour
 {
-    public Action ShopClicked;
     public Action UpgradeClickPowerClicked;
     public Action UpgradePassiveIncomeClicked;
     public Action UpgradePassiveIncomeIntervalClicked;
 
-    private GameObject _shopWindow;
+    private Button _upgradeClickPowerButton;
+    private Button _upgradePassiveIncomeButton;
+    private Button _upgradePassiveIncomeIntervalButton;
+
     private TMP_Text _clickPowerButtonText;
     private TMP_Text _passiveIncomeButtonText;
     private TMP_Text _passiveIncomeIntervalButtonText;
 
-    public void Initialize(GameObject shopWindow,
+    public void Initialize(Button upgradeClickPowerButton,
+                           Button upgradePassiveIncomeButton,
+                           Button upgradePassiveIncomeIntervalButton,
                            TMP_Text clickPowerButtonText,
                            TMP_Text passiveIncomeButtonText,
                            TMP_Text passiveIncomeIntervalButtonText)
     {
-        _shopWindow = shopWindow;
+        _upgradeClickPowerButton = upgradeClickPowerButton;
+        _upgradeClickPowerButton.onClick.AddListener(OnUpgradeClickPowerButtonClick);
+        
+        _upgradePassiveIncomeButton = upgradePassiveIncomeButton;
+        _upgradePassiveIncomeButton.onClick.AddListener(OnUpgradePassiveIncomeClick);
+
+        _upgradePassiveIncomeIntervalButton = upgradePassiveIncomeIntervalButton;
+        _upgradePassiveIncomeIntervalButton.onClick.AddListener(OnUpgradePassiveIncomeIntervalClick);
+
         _clickPowerButtonText = clickPowerButtonText;
         _passiveIncomeButtonText = passiveIncomeButtonText;
         _passiveIncomeIntervalButtonText = passiveIncomeIntervalButtonText;
-    }
-
-    public void OnShopButtonClick()
-    {
-        ShopClicked?.Invoke();
-    }
-
-    public void OnUpgradeClickPowerButtonClick()
-    {
-        UpgradeClickPowerClicked?.Invoke();
-    }
-
-    public void OnUpgradePassiveIncomeClick()
-    {
-        UpgradePassiveIncomeClicked?.Invoke();
-    }
-
-    public void OnUpgradePassiveIncomeIntervalClick()
-    {
-        UpgradePassiveIncomeIntervalClicked?.Invoke();
-    }
-
-    public void ShowShopWindow()
-    {
-        _shopWindow.transform.DOMoveY(Screen.height / 2, 0.5f);
-    }
-
-    public void HideShopWindow()
-    {
-        _shopWindow.transform.DOMoveY(-Screen.height / 2, 0.5f);
-    }
-
-    public void ResetShopWindowPosition()
-    {
-        _shopWindow.SetActive(false);
-        _shopWindow.transform.DOMoveY(-Screen.height / 2, 0.01f)
-            .OnComplete(() => _shopWindow.SetActive(true));
     }
 
     public void UpdateClickPowerButton(int level, float cost)
@@ -76,5 +52,27 @@ public class ShopView : MonoBehaviour
     public void UpdatePassiveIncomeIntervalButton(int level, float cost)
     {
         _passiveIncomeIntervalButtonText.text = $"Buy lvl {level}\nCost: {cost}";
+    }
+
+    private void OnUpgradeClickPowerButtonClick()
+    {
+        UpgradeClickPowerClicked?.Invoke();
+    }
+
+    private void OnUpgradePassiveIncomeClick()
+    {
+        UpgradePassiveIncomeClicked?.Invoke();
+    }
+
+    private void OnUpgradePassiveIncomeIntervalClick()
+    {
+        UpgradePassiveIncomeIntervalClicked?.Invoke();
+    }
+
+    private void OnDestroy()
+    {
+        _upgradeClickPowerButton.onClick.RemoveListener(OnUpgradeClickPowerButtonClick);
+        _upgradePassiveIncomeButton.onClick.RemoveListener(OnUpgradePassiveIncomeClick);
+        _upgradePassiveIncomeIntervalButton.onClick.RemoveListener(OnUpgradePassiveIncomeIntervalClick);
     }
 }

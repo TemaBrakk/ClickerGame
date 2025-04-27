@@ -7,64 +7,46 @@ using Unity.VisualScripting;
 
 public class GameView : MonoBehaviour
 {
-    public event Action OnClick;
+    public event Action CharacterClicked;
     public event Action SaveButtonClicked;
-    public event Action SaveFirstSlotButtonClicked;
-    public event Action SaveSecondSlotButtonClicked;
-    public event Action SaveThirdSlotButtonClicked;
+    public event Action ShopButtonClicked;
     public event Action ExitButtonClicked;
 
-    private InputReader _inputReader;
-    private TMP_Text _coinsText;
-
-    private GameObject _savesWindow;
     private Button _saveButton;
-    private Button _saveFirstSlotButton;
-    private Button _saveSecondSlotButton;
-    private Button _saveThirdSlotButton;
+    private Button _shopButton;
     private Button _exitButton;
 
-    private TMP_Text _firstSlotInfoText;
-    private TMP_Text _secondSlotInfoText;
-    private TMP_Text _thirdSlotInfoText;
+    private GameObject _savesWindow;
+    private GameObject _shopWindow;
+
+    private TMP_Text _coinsText;
+
+    private InputReader _inputReader;
 
     public void Initialize(InputReader inputReader,
-                           TMP_Text coinsText,
-                           GameObject savesWindow,
                            Button saveButton,
-                           Button saveFirstSlotButton,
-                           Button saveSecondSlotButton,
-                           Button saveThirdSlotButton,
+                           Button shopButton,
                            Button exitButton,
-                           TMP_Text firstSlotInfoText,
-                           TMP_Text secondSlotInfoText,
-                           TMP_Text thirdSlotInfoText)
+                           GameObject savesWindow,
+                           GameObject shopWindow,
+                           TMP_Text coinsText)
     {
         _inputReader = inputReader;
-        _inputReader.OnClick += () => OnClick?.Invoke();
-
-        _coinsText = coinsText;
-
-        _savesWindow = savesWindow;
+        _inputReader.OnClick += OnClick;
 
         _saveButton = saveButton;
         _saveButton.onClick.AddListener(OnSaveButtonClick);
 
-        _saveFirstSlotButton = saveFirstSlotButton;
-        _saveFirstSlotButton.onClick.AddListener(OnSaveFirstSlotButtonClick);
-
-        _saveSecondSlotButton = saveSecondSlotButton;
-        _saveSecondSlotButton.onClick.AddListener(OnSaveSecondSlotButtonClick);
-
-        _saveThirdSlotButton = saveThirdSlotButton;
-        _saveThirdSlotButton.onClick.AddListener(OnSaveThirdSlotButtonClick);
+        _shopButton = shopButton;
+        _shopButton.onClick.AddListener(OnShopButtonClick);
 
         _exitButton = exitButton;
         _exitButton.onClick.AddListener(OnExitButtonClick);
+        
+        _savesWindow = savesWindow;
+        _shopWindow = shopWindow;
 
-        _firstSlotInfoText = firstSlotInfoText;
-        _secondSlotInfoText = secondSlotInfoText;
-        _thirdSlotInfoText = thirdSlotInfoText;
+        _coinsText = coinsText;
     }
 
     public void UpdateCoins(float coins)
@@ -82,28 +64,19 @@ public class GameView : MonoBehaviour
         _savesWindow.transform.DOMoveY(-Screen.height / 2, 0.5f);
     }
 
-    public void UpdateFirstSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
+    public void ShowShopWindow()
     {
-        if (isEmpty)
-            _firstSlotInfoText.text = "Empty slot";
-        else
-            _firstSlotInfoText.text = $"Coins: {coins}\nPassive income {passiveIncome}";
+        _shopWindow.transform.DOMoveY(Screen.height / 2, 0.5f);
     }
 
-    public void UpdateSecondSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
+    public void HideShopWindow()
     {
-        if (isEmpty)
-            _secondSlotInfoText.text = "Empty slot";
-        else
-            _secondSlotInfoText.text = $"Coins: {coins}\nPassive income {passiveIncome}";
+        _shopWindow.transform.DOMoveY(-Screen.height / 2, 0.5f);
     }
 
-    public void UpdateThirdSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
+    private void OnClick()
     {
-        if (isEmpty)
-            _thirdSlotInfoText.text = "Empty slot";
-        else
-            _thirdSlotInfoText.text = $"Coins: {coins}\nPassive income {passiveIncome}";
+        CharacterClicked?.Invoke();
     }
 
     private void OnSaveButtonClick()
@@ -111,19 +84,9 @@ public class GameView : MonoBehaviour
         SaveButtonClicked?.Invoke();
     }
 
-    private void OnSaveFirstSlotButtonClick()
+    private void OnShopButtonClick()
     {
-        SaveFirstSlotButtonClicked?.Invoke();
-    }
-
-    private void OnSaveSecondSlotButtonClick()
-    {
-        SaveSecondSlotButtonClicked?.Invoke();
-    }
-
-    private void OnSaveThirdSlotButtonClick()
-    {
-        SaveThirdSlotButtonClicked?.Invoke();
+        ShopButtonClicked?.Invoke();
     }
 
     private void OnExitButtonClick()
@@ -133,10 +96,9 @@ public class GameView : MonoBehaviour
 
     private void OnDestroy()
     {
-        _inputReader.OnClick -= () => OnClick?.Invoke();
+        _inputReader.OnClick -= OnClick;
         _saveButton.onClick.RemoveListener(OnSaveButtonClick);
-        _saveFirstSlotButton.onClick.RemoveListener(OnSaveFirstSlotButtonClick);
-        _saveSecondSlotButton.onClick.RemoveListener(OnSaveSecondSlotButtonClick);
-        _saveThirdSlotButton.onClick.RemoveListener(OnSaveThirdSlotButtonClick);
+        _shopButton.onClick.RemoveListener(OnShopButtonClick);
+        _exitButton.onClick.RemoveListener(OnExitButtonClick);
     }
 }
