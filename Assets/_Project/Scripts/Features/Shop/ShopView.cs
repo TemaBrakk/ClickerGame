@@ -26,17 +26,14 @@ public class ShopView : MonoBehaviour
                            TMP_Text passiveIncomeIntervalButtonText)
     {
         _upgradeClickPowerButton = upgradeClickPowerButton;
-        _upgradeClickPowerButton.onClick.AddListener(OnUpgradeClickPowerButtonClick);
-        
         _upgradePassiveIncomeButton = upgradePassiveIncomeButton;
-        _upgradePassiveIncomeButton.onClick.AddListener(OnUpgradePassiveIncomeClick);
-
         _upgradePassiveIncomeIntervalButton = upgradePassiveIncomeIntervalButton;
-        _upgradePassiveIncomeIntervalButton.onClick.AddListener(OnUpgradePassiveIncomeIntervalClick);
 
         _clickPowerButtonText = clickPowerButtonText;
         _passiveIncomeButtonText = passiveIncomeButtonText;
         _passiveIncomeIntervalButtonText = passiveIncomeIntervalButtonText;
+        
+        Subscribe();
     }
 
     public void UpdateClickPowerButton(int level, float cost)
@@ -52,6 +49,13 @@ public class ShopView : MonoBehaviour
     public void UpdatePassiveIncomeIntervalButton(int level, float cost)
     {
         _passiveIncomeIntervalButtonText.text = $"Buy lvl {level}\nCost: {cost}";
+    }
+
+    private void Subscribe()
+    {
+        _upgradeClickPowerButton.onClick.AddListener(OnUpgradeClickPowerButtonClick);
+        _upgradePassiveIncomeButton.onClick.AddListener(OnUpgradePassiveIncomeClick);
+        _upgradePassiveIncomeIntervalButton.onClick.AddListener(OnUpgradePassiveIncomeIntervalClick);
     }
 
     private void OnUpgradeClickPowerButtonClick()
@@ -70,6 +74,11 @@ public class ShopView : MonoBehaviour
     }
 
     private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _upgradeClickPowerButton.onClick.RemoveListener(OnUpgradeClickPowerButtonClick);
         _upgradePassiveIncomeButton.onClick.RemoveListener(OnUpgradePassiveIncomeClick);

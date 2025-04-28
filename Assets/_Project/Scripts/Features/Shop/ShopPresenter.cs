@@ -13,11 +13,32 @@ public class ShopPresenter
         _shopView = shopView;
         _gamePresenter = gamePresenter;
 
-        SubscribeToViewEvents();
-        UpdateView();
+        Subscribe();
     }
 
-    private void SubscribeToViewEvents()
+    public void SetStats(SaveData data)
+    {
+        _shopModel.SetStats(data.ClickPowerUpgradeCost,
+                            data.ClickPowerNextLevel,
+                            data.PassiveIncomeUpgradeCost,
+                            data.PassiveIncomeNextLevel,
+                            data.PassiveIncomeIntervalUpgradeCost,
+                            data.PassiveIncomeIntervalNextLevel);
+        
+        UpdateView();
+    }
+    
+    public ShopSaveData GetSaveData()
+    {
+        return new ShopSaveData(_shopModel.ClickPowerUpgradeCost,
+                                _shopModel.ClickPowerNextLevel,
+                                _shopModel.PassiveIncomeUpgradeCost,
+                                _shopModel.PassiveIncomeNextLevel,
+                                _shopModel.PassiveIncomeIntervalUpgradeCost,
+                                _shopModel.PassiveIncomeIntervalNextLevel);
+    }
+
+    private void Subscribe()
     {
         _shopView.UpgradeClickPowerClicked += OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked += OnUpgradePassiveIncome;
@@ -52,7 +73,7 @@ public class ShopPresenter
         {
             _shopModel.AddPassiveIncomeUpgradeCost();
             _shopView.UpdatePassiveIncomeButton(_shopModel.PassiveIncomeNextLevel,
-                                             _shopModel.PassiveIncomeUpgradeCost);
+                                                _shopModel.PassiveIncomeUpgradeCost);
         }
     }
 
@@ -62,11 +83,16 @@ public class ShopPresenter
         {
             _shopModel.AddPassiveIncomeIntervalUpgradeCost();
             _shopView.UpdatePassiveIncomeIntervalButton(_shopModel.PassiveIncomeIntervalNextLevel,
-                                             _shopModel.PassiveIncomeIntervalUpgradeCost);
+                                                        _shopModel.PassiveIncomeIntervalUpgradeCost);
         }
     }
 
     public void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _shopView.UpgradeClickPowerClicked -= OnUpgradeClickPowerClick;
         _shopView.UpgradePassiveIncomeClicked -= OnUpgradePassiveIncome;

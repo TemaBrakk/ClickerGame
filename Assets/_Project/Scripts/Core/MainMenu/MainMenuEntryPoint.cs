@@ -41,6 +41,7 @@ public class MainMenuEntryPoint : MonoBehaviour
     private void Awake()
     {
         InitializeServices();
+
         InitializeMainMenuMVP();
         InitializeSaveMVP();
     }
@@ -53,22 +54,20 @@ public class MainMenuEntryPoint : MonoBehaviour
     private void InitializeMainMenuMVP()
     {
         _mainMenuModel = new MainMenuModel();
-        _mainMenuModel.Initialize();
-
-        _mainMenuView.Initialize(_playButton, _exitButton, _backButton, _savesWindow, _buttons);
-
         _mainMenuPresenter = new MainMenuPresenter();
+        
+        _mainMenuModel.Initialize();
+        _mainMenuView.Initialize(_playButton, _exitButton, _backButton, _savesWindow, _buttons);
         _mainMenuPresenter.Initialize(_mainMenuModel, _mainMenuView);
     }
 
     private void InitializeSaveMVP()
     {
         _saveModel = new SaveModel();
-        _saveModel.Initialize();
-
-        _saveView.Initialize(_loadFirstSlotButton, _loadSecondSlotButton, _loadThirdSlotButton, _firstLoadSlotText, _secondLoadSlotText, _thirdLoadSlotText);
-
         _savePresenter = new SavePresenter();
+        
+        _saveModel.Initialize();
+        _saveView.Initialize(_loadFirstSlotButton, _loadSecondSlotButton, _loadThirdSlotButton, _firstLoadSlotText, _secondLoadSlotText, _thirdLoadSlotText);
         _savePresenter.Initialize(_saveModel, _saveView, _storage);
     }
 

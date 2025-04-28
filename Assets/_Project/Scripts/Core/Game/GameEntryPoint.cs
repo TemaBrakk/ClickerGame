@@ -4,40 +4,38 @@ using UnityEngine.UI;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    [Header("MVP")]
+    [Header("Views")]
     [SerializeField] private GameView _gameView;
     [SerializeField] private ShopView _shopView;
     [SerializeField] private SaveView _saveView;
 
-    [Header("Buttons")]
-    [Header("Game")]
+    [Header("Game Buttons")]
     [SerializeField] private Button _saveButton;
     [SerializeField] private Button _shopButton;
     [SerializeField] private Button _exitButton;
     
-    [Header("Shop")]
+    [Header("Shop Buttons")]
     [SerializeField] private Button _upgradeClickPowerButton;
     [SerializeField] private Button _upgradePassiveIncomeButton;
     [SerializeField] private Button _upgradePassiveIncomeIntervalButton;
 
-    [Header("Save")]
+    [Header("Save Buttons")]
     [SerializeField] private Button _saveFirstSlotButton;
     [SerializeField] private Button _saveSecondSlotButton;
     [SerializeField] private Button _saveThirdSlotButton;
     [SerializeField] private Button _loadFirstSlotButton;
     [SerializeField] private Button _loadSecondSlotButton;
     [SerializeField] private Button _loadThirdSlotButton;
-    
-    [Header("Text")]
-    [Header("Game")]
+
+    [Header("Game Text")]
     [SerializeField] private TMP_Text _coinsText;
 
-    [Header("Shop")]
+    [Header("Shop Text")]
     [SerializeField] private TMP_Text _clickPowerButtonText;
     [SerializeField] private TMP_Text _passiveIncomeButtonText;
     [SerializeField] private TMP_Text _passiveIncomeIntervalButtonText;
 
-    [Header("Save")]
+    [Header("Save Text")]
     [SerializeField] private TMP_Text _firstSaveSlotInfoText;
     [SerializeField] private TMP_Text _secondSaveSlotInfoText;
     [SerializeField] private TMP_Text _thirdSaveSlotInfoText;
@@ -47,8 +45,8 @@ public class GameEntryPoint : MonoBehaviour
     [SerializeField] private GameObject _shopWindow;
     
     [Header("Configs")]
-    [SerializeField] private StartGameModelStats _startGameModelStats;
-    [SerializeField] private StartShopModelStats _startShopModelStats;
+    [SerializeField] private GameModelStats _gameModelStats;
+    [SerializeField] private ShopModelStats _shopModelStats;
 
     [Header("Entities")]
     [SerializeField] private Character _character;
@@ -62,8 +60,8 @@ public class GameEntryPoint : MonoBehaviour
     private SaveModel _saveModel;
     private SavePresenter _savePresenter;
 
-    private Updater _updater;
     private InputReader _inputReader;
+    private Updater _updater;
     private IStorage _storage;
 
     private const string UPDATER_PATH = "Prefabs/Updater";
@@ -101,7 +99,7 @@ public class GameEntryPoint : MonoBehaviour
         _gameModel = new GameModel();
         _gamePresenter = new GamePresenter();
 
-        _gameModel.Initialize(_startGameModelStats);
+        _gameModel.Initialize(_gameModelStats);
         _gameView.Initialize(_inputReader, _saveButton, _shopButton, _exitButton, _savesWindow, _shopWindow, _coinsText);
         _gamePresenter.Initialize(_gameView, _gameModel, _character);
 
@@ -113,7 +111,7 @@ public class GameEntryPoint : MonoBehaviour
         _shopModel = new ShopModel();
         _shopPresenter = new ShopPresenter();
 
-        _shopModel.Initialize(_startShopModelStats);
+        _shopModel.Initialize(_shopModelStats);
         _shopView.Initialize(_upgradeClickPowerButton, _upgradePassiveIncomeButton, _upgradePassiveIncomeIntervalButton, _clickPowerButtonText, _passiveIncomeButtonText, _passiveIncomeIntervalButtonText);
         _shopPresenter.Initialize(_shopModel, _shopView, _gamePresenter);
     }
@@ -125,12 +123,13 @@ public class GameEntryPoint : MonoBehaviour
 
         _saveModel.Initialize();
         _saveView.Initialize(_saveFirstSlotButton, _saveSecondSlotButton, _saveThirdSlotButton, _loadFirstSlotButton, _loadSecondSlotButton, _loadThirdSlotButton, _firstSaveSlotInfoText, _secondSaveSlotInfoText, _thirdSaveSlotInfoText);
-        _savePresenter.Initialize(_saveModel, _saveView, _storage, _gamePresenter, _shopPresenter);
+        _savePresenter.Initialize(_saveModel, _saveView, _gamePresenter, _shopPresenter, _storage);
     }
 
     private void OnDestroy()
     {
         _gamePresenter.OnDestroy();
         _shopPresenter.OnDestroy();
+        _savePresenter.OnDestroy();
     }
 }

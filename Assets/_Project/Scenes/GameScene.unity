@@ -686,7 +686,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dcdc43f7a0ad67b4ab3e3db38233dfae, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4185,8 +4185,8 @@ MonoBehaviour:
   _thirdSaveSlotInfoText: {fileID: 564767612}
   _savesWindow: {fileID: 2141793621}
   _shopWindow: {fileID: 226092429}
-  _startGameModelStats: {fileID: 11400000, guid: 1ca9ed9e611f00849a2333f0e03651b9, type: 2}
-  _startShopModelStats: {fileID: 11400000, guid: 55b12c45a3bc31447857b9bbb26d9416, type: 2}
+  _gameModelStats: {fileID: 11400000, guid: 4d2303845754a1243b26ab19c64fb5b1, type: 2}
+  _shopModelStats: {fileID: 11400000, guid: 9b1a5f9129f78774babda87a22fc8b47, type: 2}
   _character: {fileID: 354870404}
 --- !u!4 &1506120659
 Transform:

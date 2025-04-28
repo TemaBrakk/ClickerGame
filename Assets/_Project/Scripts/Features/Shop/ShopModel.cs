@@ -6,43 +6,45 @@ public class ShopModel
     public int PassiveIncomeNextLevel { get; private set; }
     public float PassiveIncomeIntervalUpgradeCost { get; private set; }
     public int PassiveIncomeIntervalNextLevel { get; private set; }
+    public float UpgradeCostModifier { get; private set; }
 
-    public bool IsShopWindowActive { get; private set; }
-
-    public void Initialize(StartShopModelStats startStats)
+    public void Initialize(ShopModelStats startStats)
     {
-        ClickPowerUpgradeCost = startStats.ClickPowerUpgradeCost;
-        ClickPowerNextLevel = startStats.ClickPowerNextLevel;
-
-        PassiveIncomeUpgradeCost = startStats.PassiveIncomeUpgradeCost;
-        PassiveIncomeNextLevel = startStats.PassiveIncomeNextLevel;
-
-        PassiveIncomeIntervalUpgradeCost = startStats.PassiveIncomeIntervalUpgradeCost;
-        PassiveIncomeIntervalNextLevel = startStats.PassiveIncomeIntervalNextLevel;
-        
-        IsShopWindowActive = startStats.IsShopWindowActive;
+        UpgradeCostModifier = startStats.UpgradeCostModifier;
     }
 
-    public void ChangeShopWindowMode()
+    public void SetStats(float clickPowerUpgradeCost,
+                         int clickPowerNextLevel,
+                         float passiveIncomeUpgradeCost,
+                         int passiveIncomeNextLevel,
+                         float passiveIncomeIntervalUpgradeCost,
+                         int passiveIncomeIntervalNextLevel)
     {
-        IsShopWindowActive = !IsShopWindowActive;
+        ClickPowerUpgradeCost = clickPowerUpgradeCost;
+        ClickPowerNextLevel = clickPowerNextLevel;
+
+        PassiveIncomeUpgradeCost = passiveIncomeUpgradeCost;
+        PassiveIncomeNextLevel = passiveIncomeNextLevel;
+
+        PassiveIncomeIntervalUpgradeCost = passiveIncomeIntervalUpgradeCost;
+        PassiveIncomeIntervalNextLevel = passiveIncomeIntervalNextLevel;
     }
 
     public void AddClickPowerUpgradeCost()
     {
-        ClickPowerUpgradeCost *= 2f;
+        ClickPowerUpgradeCost *= UpgradeCostModifier;
         ClickPowerNextLevel += 1;
     }
 
     public void AddPassiveIncomeUpgradeCost()
     {
-        PassiveIncomeUpgradeCost *= 2f;
+        PassiveIncomeUpgradeCost *= UpgradeCostModifier;
         PassiveIncomeNextLevel += 1;
     }
 
     public void AddPassiveIncomeIntervalUpgradeCost()
     {
-        PassiveIncomeIntervalUpgradeCost *= 2f;
+        PassiveIncomeIntervalUpgradeCost *= UpgradeCostModifier;
         PassiveIncomeIntervalNextLevel += 1;
     }
 }

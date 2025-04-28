@@ -16,9 +16,9 @@ public class SavePresenter
 
     public void Initialize(SaveModel saveModel,
                            SaveView saveView,
-                           IStorage storage,
                            GamePresenter gamePresenter,
-                           ShopPresenter shopPresenter)
+                           ShopPresenter shopPresenter,
+                           IStorage storage)
     {
         _saveModel = saveModel;
         _saveView = saveView;
@@ -29,7 +29,7 @@ public class SavePresenter
         _isAll = true;
 
         Subscribe();
-        UpdateSaveSlotsText();
+        Prepare();
         SetStats();
     }
 
@@ -44,7 +44,7 @@ public class SavePresenter
         _isAll = false;
 
         Subscribe();
-        UpdateSaveSlotsText();
+        Prepare();
     }
 
     private void Subscribe()
@@ -61,93 +61,122 @@ public class SavePresenter
         _saveView.LoadThirdSlotButtonClicked += LoadThirdSaveSlot;
     }
 
-    private void UpdateSaveSlotsText()
+    private void Prepare()
     {
         if (!_storage.IsFileExists(SAVE_FILE_NAME + "1"))
         {
-            _saveView.UpdateFirstSaveSlotText(true);
+            _saveView.UpdateFirstSaveSlotText();
         }
         else
         {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "1");
-            _saveView.UpdateFirstSaveSlotText(false, data.Coins, data.PassiveIncome);
+            SaveData data = _storage.Load<SaveData>(SAVE_FILE_NAME + "1");
+            _saveView.UpdateFirstSaveSlotText(data.Coins, data.PassiveIncome);
+            _saveModel.SetFirstSaveSlotData(data);
         }
 
         if (!_storage.IsFileExists(SAVE_FILE_NAME + "2"))
         {
-            _saveView.UpdateSecondSaveSlotText(true);
+            _saveView.UpdateSecondSaveSlotText();
         }
         else
         {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "2");
-            _saveView.UpdateSecondSaveSlotText(false, data.Coins, data.PassiveIncome);
+            SaveData data = _storage.Load<SaveData>(SAVE_FILE_NAME + "2");
+            _saveView.UpdateSecondSaveSlotText(data.Coins, data.PassiveIncome);
+            _saveModel.SetSecondSaveSlotData(data);
         }
 
         if (!_storage.IsFileExists(SAVE_FILE_NAME + "3"))
         {
-            _saveView.UpdateThirdSaveSlotText(true);
+            _saveView.UpdateThirdSaveSlotText();
         }
         else
         {
-            GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME + "3");
-            _saveView.UpdateThirdSaveSlotText(false, data.Coins, data.PassiveIncome);
+            SaveData data = _storage.Load<SaveData>(SAVE_FILE_NAME + "3");
+            _saveView.UpdateThirdSaveSlotText(data.Coins, data.PassiveIncome);
+            _saveModel.SetThirdSaveSlotData(data);
         }
     }
 
     private void SetStats()
     {
-        GameSaveData data = _storage.Load<GameSaveData>(SAVE_FILE_NAME);
+        SaveData data = _storage.Load<SaveData>(SAVE_FILE_NAME);
         _gamePresenter.SetStats(data);
+        _shopPresenter.SetStats(data);
+        _saveModel.SetMainSaveData(data);
     }
 
     private void SaveInFirstSlot()
     {
-        GameSaveData data = _gamePresenter.GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "1", data);
-        _saveView.UpdateFirstSaveSlotText(false, data.Coins, data.PassiveIncome);
+        SaveData data = Save("1");
+        _saveView.UpdateFirstSaveSlotText(data.Coins, data.PassiveIncome);
+        _saveModel.SetFirstSaveSlotData(data);
     }
 
     private void SaveInSecondSlot()
     {
-        GameSaveData data = _gamePresenter.GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "2", data);
-        _saveView.UpdateSecondSaveSlotText(false, data.Coins, data.PassiveIncome);
+        SaveData data = Save("2");
+        _saveView.UpdateSecondSaveSlotText(data.Coins, data.PassiveIncome);
+        _saveModel.SetSecondSaveSlotData(data);
     }
 
     private void SaveInThirdSlot()
     {
-        GameSaveData data = _gamePresenter.GetSaveData();
-        _storage.Save(SAVE_FILE_NAME + "3", data);
-        _saveView.UpdateThirdSaveSlotText(false, data.Coins, data.PassiveIncome);
+        SaveData data = Save("3");
+        _saveView.UpdateThirdSaveSlotText(data.Coins, data.PassiveIncome);
+        _saveModel.SetThirdSaveSlotData(data);
+    }
+
+    private SaveData Save(string slotNumber)
+    {
+        string key = SAVE_FILE_NAME + slotNumber;
+
+        GameSaveData gameSaveData = _gamePresenter.GetSaveData();
+        ShopSaveData shopSaveData = _shopPresenter.GetSaveData();
+
+        SaveData data = new SaveData(gameSaveData.Coins,
+                                     gameSaveData.ClickPower,
+                                     gameSaveData.PassiveIncome,
+                                     gameSaveData.PassiveIncomeInterval,
+                                     shopSaveData.ClickPowerUpgradeCost,
+                                     shopSaveData.ClickPowerNextLevel,
+                                     shopSaveData.PassiveIncomeUpgradeCost,
+                                     shopSaveData.PassiveIncomeNextLevel,
+                                     shopSaveData.PassiveIncomeIntervalUpgradeCost,
+                                     shopSaveData.PassiveIncomeIntervalNextLevel);
+
+        _storage.Save(key, data);
+
+        return data;
     }
 
     private void LoadFirstSaveSlot()
     {
-        HandleSaves("1");
+        Load("1");
         SceneLoader.Instance.LoadGameScene();
     }
 
     private void LoadSecondSaveSlot()
     {
-        HandleSaves("2");
+        Load("2");
         SceneLoader.Instance.LoadGameScene();
     }
 
     private void LoadThirdSaveSlot()
     {
-        HandleSaves("3");
+        Load("3");
         SceneLoader.Instance.LoadGameScene();
     }
 
-    private void HandleSaves(string slotNumber)
+    private void Load(string slotNumber)
     {
         string key = SAVE_FILE_NAME + slotNumber;
 
         if (!_storage.IsFileExists(key))
-            _storage.Save(key, new GameSaveData(0f, 1f, 0f, 1f));
+            _storage.Save(key, new SaveData());
 
-        GameSaveData saveData = _storage.Load<GameSaveData>(key);
-        _storage.Save(SAVE_FILE_NAME, saveData);
+        SaveData data = _storage.Load<SaveData>(key);
+        _storage.Save(SAVE_FILE_NAME, data);
+        _saveModel.SetMainSaveData(data);
     }
 
     public void OnDestroy()

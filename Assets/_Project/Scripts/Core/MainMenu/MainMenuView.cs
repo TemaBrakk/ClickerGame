@@ -27,16 +27,18 @@ public class MainMenuView : MonoBehaviour
                            GameObject buttons)
     {
         _playButton = playButton;
-        _playButton.onClick.AddListener(OnPlayButtonClick);
-
         _exitButton = exitButton;
-        _exitButton.onClick.AddListener(OnExitButtonClick);
-
         _backButton = backButton;
-        _backButton.onClick.AddListener(OnBackButtonClick);
 
         _savesWindow = savesWindow;
         _buttons = buttons;
+
+        Subscribe();
+    }
+
+    public void ResetSavesWindowPosition()
+    {
+        _savesWindow.transform.DOMoveX(Screen.width * 1.5f, 0.01f).SetEase(Ease.Linear);
     }
 
     public void ShowSavesWindow()
@@ -49,6 +51,13 @@ public class MainMenuView : MonoBehaviour
     {
         _savesWindow.transform.DOMoveX(Screen.width * 1.5f, 0.5f).SetEase(Ease.Linear);
         _buttons.transform.DOMoveX(Screen.width / 2f, 0.5f).SetEase(Ease.Linear);
+    }
+
+    private void Subscribe()
+    {
+        _playButton.onClick.AddListener(OnPlayButtonClick);
+        _exitButton.onClick.AddListener(OnExitButtonClick);
+        _backButton.onClick.AddListener(OnBackButtonClick);
     }
 
     private void OnPlayButtonClick()
@@ -67,6 +76,11 @@ public class MainMenuView : MonoBehaviour
     }
 
     private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _playButton.onClick.RemoveListener(OnPlayButtonClick);
         _exitButton.onClick.RemoveListener(OnExitButtonClick);

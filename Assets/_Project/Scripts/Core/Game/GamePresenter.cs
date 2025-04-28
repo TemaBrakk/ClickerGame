@@ -16,15 +16,90 @@ public class GamePresenter
         _gameModel = gameModel;
         _character = character;
 
-        SubscribeToView();
+        Subscribe();
+        PrepareUI();
     }
 
-    private void SubscribeToView()
+    public void SetStats(SaveData data)
+    {
+        _gameModel.SetStats(data.Coins,
+                            data.ClickPower,
+                            data.PassiveIncome,
+                            data.PassiveIncomeInterval);
+
+        _gameView.UpdateCoins(_gameModel.Coins);
+    }
+
+    public GameSaveData GetSaveData()
+    {
+        return new GameSaveData(_gameModel.Coins,
+                                _gameModel.ClickPower,
+                                _gameModel.PassiveIncome,
+                                _gameModel.PassiveIncomeInterval);
+    }
+
+    public bool TryUpgradeClickPower(float cost)
+    {
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.UpgradeClickPower();
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryUpgradePassiveIncome(float cost)
+    {
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.UpgradePassiveIncome();
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryUpgradePassiveIncomeInterval(float cost)
+    {
+        if (IsEnoughCoins(cost))
+        {
+            _gameModel.UpgradePassiveIncomeInterval();
+            AddCoins(-cost);
+            return true;
+        }
+
+        return false;
+    }
+
+    public IEnumerator IncomeRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(_gameModel.PassiveIncomeInterval);
+            AddCoins(_gameModel.PassiveIncome);
+        }
+    }
+
+    public bool IsEnoughCoins(float cost)
+    {
+        return cost <= _gameModel.Coins;
+    }
+
+    private void Subscribe()
     {
         _gameView.CharacterClicked += OnClick;
         _gameView.SaveButtonClicked += OnSaveButtonClick;
         _gameView.ShopButtonClicked += OnShopButtonClick;
         _gameView.ExitButtonClicked += OnExitButtonClick;
+    }
+
+    private void PrepareUI()
+    {
+        _gameView.ResetSavesWindowPosition();
+        _gameView.ResetShopWindowPosition();
     }
 
     private void AddCoins(float amount)
@@ -80,75 +155,13 @@ public class GamePresenter
         SceneLoader.Instance.LoadMainMenuScene();
     }
 
-    public GameSaveData GetSaveData()
-    {
-        return new GameSaveData(_gameModel.Coins,
-                                _gameModel.ClickPower,
-                                _gameModel.PassiveIncome,
-                                _gameModel.PassiveIncomeInterval);
-    }
-
-    public void SetStats(GameSaveData data)
-    {
-        _gameModel.SetStats(data.Coins,
-                            data.ClickPower,
-                            data.PassiveIncome,
-                            data.PassiveIncomeInterval);
-
-        _gameView.UpdateCoins(_gameModel.Coins);
-    }
-
-    public bool TryUpgradeClickPower(float cost)
-    {
-        if (IsEnoughCoins(cost))
-        {
-            _gameModel.UpgradeClickPower();
-            AddCoins(-cost);
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool TryUpgradePassiveIncome(float cost)
-    {
-        if (IsEnoughCoins(cost))
-        {
-            _gameModel.UpgradePassiveIncome();
-            AddCoins(-cost);
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool TryUpgradePassiveIncomeInterval(float cost)
-    {
-        if (IsEnoughCoins(cost))
-        {
-            _gameModel.UpgradePassiveIncomeInterval();
-            AddCoins(-cost);
-            return true;
-        }
-
-        return false;
-    }
-
-    public IEnumerator IncomeRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(_gameModel.PassiveIncomeInterval);
-            AddCoins(_gameModel.PassiveIncome);
-        }
-    }
-
-    public bool IsEnoughCoins(float cost)
-    {
-        return cost <= _gameModel.Coins;
-    }
 
     public void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _gameView.CharacterClicked -= OnClick;
         _gameView.SaveButtonClicked -= OnSaveButtonClick;

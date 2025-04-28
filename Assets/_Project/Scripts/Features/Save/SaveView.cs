@@ -74,6 +74,36 @@ public class SaveView : MonoBehaviour
         Subscribe();
     }
 
+    public void UpdateFirstSaveSlotText()
+    {
+        _firstLoadSlotText.text = "Empty slot";
+    }
+
+    public void UpdateFirstSaveSlotText(float coins, float passiveIncome)
+    {
+        _firstLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
+    }
+
+    public void UpdateSecondSaveSlotText()
+    {
+        _secondLoadSlotText.text = "Empty slot";
+    }
+
+    public void UpdateSecondSaveSlotText(float coins, float passiveIncome)
+    {
+        _secondLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
+    }
+
+    public void UpdateThirdSaveSlotText()
+    {
+        _thirdLoadSlotText.text = "Empty slot";
+    }
+
+    public void UpdateThirdSaveSlotText(float coins, float passiveIncome)
+    {
+        _thirdLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
+    }
+
     private void Subscribe()
     {
         if (_isAll)
@@ -86,30 +116,6 @@ public class SaveView : MonoBehaviour
         _loadFirstSlotButton.onClick.AddListener(OnLoadFirstSlotButtonCLick);
         _loadSecondSlotButton.onClick.AddListener(OnLoadSecondSlotButtonCLick);
         _loadThirdSlotButton.onClick.AddListener(OnLoadThirdSlotButtonCLick);
-    }
-
-    public void UpdateFirstSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
-    {
-        if (isEmpty)
-            _firstLoadSlotText.text = "Empty slot";
-        else
-            _firstLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
-    }
-
-    public void UpdateSecondSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
-    {
-        if (isEmpty)
-            _secondLoadSlotText.text = "Empty slot";
-        else
-            _secondLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
-    }
-
-    public void UpdateThirdSaveSlotText(bool isEmpty, float coins = 0, float passiveIncome = 0)
-    {
-        if (isEmpty)
-            _thirdLoadSlotText.text = "Empty slot";
-        else
-            _thirdLoadSlotText.text = $"Coins: {coins}\nPassive income: {passiveIncome}";
     }
 
     private void OnSaveFirstSlotButtonCLick()

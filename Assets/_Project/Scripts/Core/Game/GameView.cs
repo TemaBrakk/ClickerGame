@@ -32,26 +32,27 @@ public class GameView : MonoBehaviour
                            TMP_Text coinsText)
     {
         _inputReader = inputReader;
-        _inputReader.OnClick += OnClick;
 
         _saveButton = saveButton;
-        _saveButton.onClick.AddListener(OnSaveButtonClick);
-
         _shopButton = shopButton;
-        _shopButton.onClick.AddListener(OnShopButtonClick);
-
         _exitButton = exitButton;
-        _exitButton.onClick.AddListener(OnExitButtonClick);
-        
+
         _savesWindow = savesWindow;
         _shopWindow = shopWindow;
 
         _coinsText = coinsText;
+
+        Subscribe();
     }
 
     public void UpdateCoins(float coins)
     {
         _coinsText.text = $"Coins: {coins}";
+    }
+
+    public void ResetSavesWindowPosition()
+    {
+        _savesWindow.transform.DOMoveY(-Screen.height / 2, 0.01f);
     }
 
     public void ShowSavesWindow()
@@ -64,6 +65,11 @@ public class GameView : MonoBehaviour
         _savesWindow.transform.DOMoveY(-Screen.height / 2, 0.5f);
     }
 
+    public void ResetShopWindowPosition()
+    {
+        _shopWindow.transform.DOMoveY(-Screen.height / 2, 0.01f);
+    }
+
     public void ShowShopWindow()
     {
         _shopWindow.transform.DOMoveY(Screen.height / 2, 0.5f);
@@ -72,6 +78,14 @@ public class GameView : MonoBehaviour
     public void HideShopWindow()
     {
         _shopWindow.transform.DOMoveY(-Screen.height / 2, 0.5f);
+    }
+
+    private void Subscribe()
+    {
+        _inputReader.OnClick += OnClick;
+        _saveButton.onClick.AddListener(OnSaveButtonClick);
+        _shopButton.onClick.AddListener(OnShopButtonClick);
+        _exitButton.onClick.AddListener(OnExitButtonClick);
     }
 
     private void OnClick()
@@ -95,6 +109,11 @@ public class GameView : MonoBehaviour
     }
 
     private void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _inputReader.OnClick -= OnClick;
         _saveButton.onClick.RemoveListener(OnSaveButtonClick);

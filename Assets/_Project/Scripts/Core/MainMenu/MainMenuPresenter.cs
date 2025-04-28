@@ -15,14 +15,20 @@ public class MainMenuPresenter
         _mainMenuModel = mainMenuModel;
         _mainMenuView = mainMenuView;
 
-        SubscribeToView();
+        Subscribe();
+        PrepareUI();
     }
 
-    private void SubscribeToView()
+    private void Subscribe()
     {
         _mainMenuView.PlayButtonClicked += OnPlayButtonClick;
         _mainMenuView.ExitButtonClicked += OnExitButtonClick;
         _mainMenuView.BackButtonClicked += OnBackButtonClick;
+    }
+
+    private void PrepareUI()
+    {
+        _mainMenuView.ResetSavesWindowPosition();
     }
 
     private void OnPlayButtonClick()
@@ -45,6 +51,11 @@ public class MainMenuPresenter
     }
 
     public void OnDestroy()
+    {
+        Unsubscribe();
+    }
+
+    private void Unsubscribe()
     {
         _mainMenuView.PlayButtonClicked -= OnPlayButtonClick;
         _mainMenuView.ExitButtonClicked -= OnExitButtonClick;
